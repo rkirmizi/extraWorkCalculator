@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
+"""
+Inspired by http://blog.lost-theory.org/post/how-to-parse-git-log-output
+"""
 
 from subprocess import *
 import datetime
