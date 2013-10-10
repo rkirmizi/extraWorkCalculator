@@ -3,6 +3,8 @@
 
 from subprocess import *
 import datetime
+import sys
+import os
 
 GIT_COMMIT_FIELDS = ['id', 'author_name', 'author_email', 'date', 'message']
 GIT_LOG_FORMAT = ['%H', '%an', '%ae', '%ad', '%s']
@@ -16,9 +18,10 @@ log = [dict(zip(GIT_COMMIT_FIELDS, row)) for row in log]
 
 short_months = ["Jan","Feb" ,"Mar","Apr","May" ,"June","Jul","Aug","Sep","Oct" ,"Nov","Dec"]
 
-def calculateExtraWork():
+def calculateExtraWork(gitDir="."):
+	os.chdir(gitDir)
 	email = raw_input('Commiter email address:\t')
-	month = raw_input('Month to calculate (in format):%s\n' %(", ".join(short_months)))
+	month = raw_input('Month to calculate (in format): %s\n' %(", ".join(short_months)))
 	work_start = int(raw_input('Work hour starts at:\nPlease Choose in range: %s\n' %range(0,24)))
 	work_end = int(raw_input('Work hour ends at:\nPlease Choose in range: %s\n' %range(0,24)))
 	print 'Calculating extra work for %s at month: %s. Excluded hours: %s' %(email, month,range(work_start,work_end))
@@ -36,7 +39,24 @@ def calculateExtraWork():
 
 
 if __name__ == '__main__':
-	try:
-		calculateExtraWork()
-	except KeyboardInterrupt:
-		print "\nCtrl+C detected..\nExiting app.."
+	if len(sys.argv) < 2:
+		try:
+			print "Git directory not given.\nTrying current path as git directory (%s)" %os.getcwd()
+			if os.path.exists('.git'):
+				calculateExtraWork()
+			else:
+				print "Given directory is not a git directory\nExiting app.."
+				sys.exit()
+
+		except KeyboardInterrupt:
+			print "\nCtrl+C detected..\nExiting app.."
+	else:
+		try:
+			print "Working on dir %s" %sys.argv[1]
+			if os.path.exists('%s/.git'%sys.argv[1]):
+				calculateExtraWork(sys.argv[1])
+			else:
+				print "Given directory is not a git directory\nExiting app.."
+				sys.exit()
+		except KeyboardInterrupt:
+			print "\nCtrl+C detected..\nExiting app.."
