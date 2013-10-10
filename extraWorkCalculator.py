@@ -22,8 +22,8 @@ def calculateExtraWork(gitDir="."):
 	os.chdir(gitDir)
 	email = raw_input('Commiter email address:\t')
 	month = raw_input('Month to calculate (in format): %s\n' %(", ".join(short_months)))
-	work_start = int(raw_input('Work hour starts at:\nPlease Choose in range: %s\n' %range(0,24)))
-	work_end = int(raw_input('Work hour ends at:\nPlease Choose in range: %s\n' %range(0,24)))
+	work_start = int(raw_input('Work hour starts at:\nPlease Choose an hour between: 0-23:\n'))
+	work_end = int(raw_input('Work hour ends at:\nPlease Choose an hour between: 0-23:\n'))
 	print 'Calculating extra work for %s at month: %s. Excluded hours: %s' %(email, month,range(work_start,work_end))
 	for i in log:
 	    if i['author_email'] == email:
